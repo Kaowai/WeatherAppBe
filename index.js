@@ -23,7 +23,10 @@ app.use(express.json());
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("MongoDB Connected");
   } catch (error) {
     console.log(`Error: ${error.message}`);
@@ -78,7 +81,7 @@ app.post('/api/register', async (req, res) => {
   const { email, location } = req.body;
 
   try {
-    const user = new User({ email, location});
+    const user = new User({ email, location });
     await user.save();
 
     const mailOptions = {
