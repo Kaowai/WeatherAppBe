@@ -10,6 +10,13 @@ const User = require('./models/User'); // Ensure this path is correct
 const app = express();
 const port = process.env.PORT || 5000;
 
+const corsOptions = {
+  origin: 'https://your-frontend-domain.com', // Update with your frontend domain
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
