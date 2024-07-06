@@ -8,10 +8,10 @@ const axios = require('axios');
 const cron = require('node-cron');
 const User = require('./models/User'); // Ensure this path is correct
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 const corsOptions = {
-  origin: 'https://your-frontend-domain.com', // Update with your frontend domain
+  origin: 'https://weather-app-three-alpha-23.vercel.app/', // Update with your frontend domain
   optionsSuccessStatus: 200
 };
 
@@ -39,10 +39,10 @@ app.get('/', (req, res) => {
 });
 
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE,
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: 'caohoaithcsant@gmail.com',
+    pass: 'csndxkyinoulwdiz',
   },
 });
 
@@ -53,7 +53,7 @@ cron.schedule('0 10 * * *', async () => {
     for (const user of users) {
       const weatherResponse = await axios.get('https://api.weatherapi.com/v1/forecast.json', {
         params: {
-          key: process.env.APIKEY,
+          key: '38f335382d7e44f6891231229240307',
           q: user.location,
           days: 1,
         },
@@ -61,7 +61,7 @@ cron.schedule('0 10 * * *', async () => {
 
       const forecast = weatherResponse.data.forecast.forecastday[0];
       const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: 'caohoaithcsant@gmail.com',
         to: user.email,
         subject: 'Daily Weather Forecast',
         text: `Today's weather: ${forecast.day.condition.text}, high of ${forecast.day.maxtemp_c}°C, low of ${forecast.day.mintemp_c}°C.`,
@@ -82,7 +82,7 @@ app.post('/api/register', async (req, res) => {
     await user.save();
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: 'caohoaithcsant@gmail.com',
       to: email,
       subject: 'Please confirm your email address',
       text: `Please confirm your email address by clicking on the following link: http://localhost:${port}/api/confirm/${user.confirmToken}`
@@ -133,7 +133,7 @@ app.post('/api/unsubscribe', async (req, res) => {
 
 app.get('/api/weather', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
-  const apiKey = process.env.APIKEY;
+  const apiKey = '38f335382d7e44f6891231229240307';
 
   try {
     const response = await axios.get('https://api.weatherapi.com/v1/current.json', {
@@ -151,7 +151,7 @@ app.get('/api/weather', async (req, res) => {
 app.get('/api/forecast', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
   const days = req.query.days || 4;
-  const apiKey = process.env.APIKEY;
+  const apiKey = '38f335382d7e44f6891231229240307';
   try {
     const response = await axios.get('https://api.weatherapi.com/v1/forecast.json', {
       params: {
