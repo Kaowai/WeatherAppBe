@@ -56,7 +56,7 @@ cron.schedule('0 10 * * *', async () => {
     for (const user of users) {
       const weatherResponse = await axios.get('https://api.weatherapi.com/v1/forecast.json', {
         params: {
-          key: '38f335382d7e44f6891231229240307',
+          key: '6515965237304e4899c52935241807',
           q: user.location,
           days: 1,
         },
@@ -136,7 +136,7 @@ app.post('/api/unsubscribe', async (req, res) => {
 
 app.get('/api/weather', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
-  const apiKey = '38f335382d7e44f6891231229240307';
+  const apiKey = '6515965237304e4899c52935241807';
 
   try {
     const response = await axios.get('https://api.weatherapi.com/v1/current.json', {
@@ -154,7 +154,7 @@ app.get('/api/weather', async (req, res) => {
 app.get('/api/forecast', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
   const days = req.query.days || 4;
-  const apiKey = '38f335382d7e44f6891231229240307';
+  const apiKey = '6515965237304e4899c52935241807';
   try {
     const response = await axios.get('https://api.weatherapi.com/v1/forecast.json', {
       params: {
