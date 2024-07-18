@@ -136,7 +136,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/weather', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
-  const apiKey = '6515965237304e4899c52935241807';
+  const apiKey = '1dcda379ce114b32ae671649241807';
 
   try {
     const response = await axios.get('https://api.weatherapi.com/v1/current.json', {
@@ -154,7 +154,7 @@ app.get('/api/weather', async (req, res) => {
 app.get('/api/forecast', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
   const days = req.query.days || 4;
-  const apiKey = '6515965237304e4899c52935241807';
+  const apiKey = '1dcda379ce114b32ae671649241807';
   try {
     const response = await axios.get('https://api.weatherapi.com/v1/forecast.json', {
       params: {
