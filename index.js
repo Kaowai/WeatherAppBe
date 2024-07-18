@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const cors = require('cors');
 const axios = require('axios');
 const cron = require('node-cron');
@@ -21,21 +21,21 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("MongoDB Connected");
-  } catch (error) {
-    console.log(`Error: ${error.message}`);
-    console.log("Exiting...")
-    process.exit(1);
-  }
-};
+// const connectDB = async () => {
+//   try {
+//     const conn = await mongoose.connect(process.env.MONGODB_URI, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     });
+//     console.log("MongoDB Connected");
+//   } catch (error) {
+//     console.log(`Error: ${error.message}`);
+//     console.log("Exiting...")
+//     process.exit(1);
+//   }
+// };
 
-connectDB();
+// connectDB();
 
 app.get('/', (req, res) => {
   res.send('API is running');
