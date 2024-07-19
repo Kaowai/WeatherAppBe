@@ -9,9 +9,9 @@ const cron = require('node-cron');
 // const User = require('./models/User'); 
 const app = express();
 const port = 5000;
-
+const { validate } = require('deep-email-validator');
 const corsOptions = {
-  origin: 'https://weather-app-three-alpha-23.vercel.app/', 
+  origin: 'http://localhost:5173',
   optionsSuccessStatus: 200
 };
 
@@ -41,13 +41,13 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: 'caohoaithcsant@gmail.com',
-//     pass: 'csndxkyinoulwdiz',
-//   },
-// });
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'caohoaithcsant@gmail.com',
+    pass: 'csndxkyinoulwdiz',
+  },
+});
 
 // cron.schedule('0 10 * * *', async () => {
 //   try {
@@ -77,26 +77,74 @@ app.get('/', (req, res) => {
 //   }
 // });
 
-// app.post('/api/register', async (req, res) => {
-//   const { email, location } = req.body;
+app.post('/api/register', async (req, res) => {
+  const { name, email, location, data } = req.body;
+  console.log(email);
+  console.log(location?.name);
+  try {
+    const mailOptions = {
+      from: 'caohoaithcsant@gmail.com',
+      to: email,
+      subject: 'REGISTER EMAIL SUCCESSFULLY',
+      html: `
+        <html>
+    <head>
+        <title>Error</title>  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        
+        <div class="app-title">
+            <div>Weather app</div>
+        </div>		
+        
+        <div><hr/></div>
 
-//   try {
-//     const user = new User({ email, location });
-//     await user.save();
+        <h1>Dear <span style="font-weight: bold;">${name}</span>,Welcome to our weather apps!</h1>
 
-//     const mailOptions = {
-//       from: 'caohoaithcsant@gmail.com',
-//       to: email,
-//       subject: 'Please confirm your email address',
-//       text: `Please confirm your email address by clicking on the following link: http://localhost:${port}/api/confirm/${user.confirmToken}`
-//     };
+        <div>Our System will send you nofitication about <span style="color: #ff0000; font-weight: bold; ">${location?.name}</span> at 9 AM every days.</div>
+        <div>
+          <p>You can unsubscribe at any time by visiting our system.</p>
+          <a href="https://your-unsubscribe-link.com" style="color: #ff0000;">Unsubscribe</a>
+        </div>
+        <div>
+          Here is the forecast for today: 
+          <div class='container-weather'>
+            
+          </div>
+        </div>
+        <div style="
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: center;
+                  align-items: start;
+                  gap: 15px;"
+                  >
+              <div><span style="font-style: bold;">(${location?.name})</span></div><br />
+              <div><span style=" font-weight: bold; ">Temp:</span> ${data?.temp_c} °C</div><br/>
+              <div><span style=" font-weight: bold; ">Wind:</span> ${data?.wind_kph} km/h</div><br/>
+              <div><span style=" font-weight: bold; ">Humidity:</span> ${data?.humidity} %</div><br/>
+            </div>
+            <div class='status'>
+              <img src=${data?.condition?.icon} alt='weather' />
+              <span>${data?.condition?.text}</span>
+            </div>
+    </body>
 
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).send('Confirmation email sent');
-//   } catch (error) {
-//     res.status(500).send(`Error: ${error.message}`);
-//   }
-// });
+</html>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Confirmation email sent');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(`Error: ${error.message}`);
+  }
+});
 
 // app.get('/api/confirm/:token', async (req, res) => {
 //   const { token } = req.params;
@@ -118,21 +166,52 @@ app.get('/', (req, res) => {
 //   }
 // });
 
-// app.post('/api/unsubscribe', async (req, res) => {
-//   const { email } = req.body;
+app.post('/api/unsubscribe', async (req, res) => {
+  const { email } = req.body;
 
-//   try {
-//     const user = await User.findOneAndDelete({ email });
+  try {
+    const mailOptions = {
+      from: 'caohoaithcsant@gmail.com',
+      to: email,
+      subject: 'UNSUBCRIBE EMAIL SUCCESSFULLY',
+      html: `
+        <html>
+    <head>
+        <title>Error</title>  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        
+        <div class="app-title">
+            <div>Weather app</div>
+        </div>		
+        
+        <div><hr/></div>
 
-//     if (!user) {
-//       return res.status(400).send('Email not found');
-//     }
+        <h1>Thank you for using our apps</h1>
 
-//     res.status(200).send('Unsubscribed successfully');
-//   } catch (error) {
-//     res.status(500).send(`Error: ${error.message}`);
-//   }
-// });
+        <div>Our System will not send you nofitication from today</div>
+        <div>
+          <p>You can subscribe at any time by visiting our system.</p>
+          <a href="https://your-unsubscribe-link.com" style="color: #ff0000;">Unsubscribe</a>
+        </div>
+        
+    </body>
+
+</html>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Confirmation email sent');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(`Error: ${error.message}`);
+  }
+});
 
 app.get('/api/weather', async (req, res) => {
   const city = req.query.city || 'Ho Chi Minh City';
