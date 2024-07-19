@@ -9,7 +9,6 @@ const cron = require('node-cron');
 // const User = require('./models/User'); 
 const app = express();
 const port = 5000;
-const { validate } = require('deep-email-validator');
 const corsOptions = {
   origin: 'http://localhost:5173',
   optionsSuccessStatus: 200
