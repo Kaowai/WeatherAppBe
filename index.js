@@ -9,7 +9,7 @@ const cron = require('node-cron');
 const app = express();
 const port = 5000;
 const corsOptions = {
-  origin: 'https://weather-app-three-alpha-23.vercel.app/',
+  origin: ['http://localhost:5173', 'https://weather-app-three-alpha-23.vercel.app'],
   optionsSuccessStatus: 200
 };
 
